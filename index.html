@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Animation and Timer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #111, #000);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background-color: red;
+            animation: particleAnim 2s infinite ease-in-out;
+        }
+
+        @keyframes particleAnim {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(2);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+        }
+
+        #godxhackker, #period1m, #timer1m, #textview3 {
+            color: white;
+            margin: 10px;
+            font-size: 24px;
+            text-shadow: 0px 0px 10px red;
+        }
+
+        #PREDICT {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: red;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 10px red;
+        }
+
+        #PREDICT:hover {
+            background-color: darkred;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Particle Animation Layer -->
+    <div id="particles"></div>
+
+    <!-- UI Elements -->
+    <div class="container">
+        <div id="godxhackker">godxhackker</div>
+        <div id="period1m">Period: --</div>
+        <div id="timer1m">Timer: -- : --</div>
+        <div id="textview3">Result: --</div>
+        <button id="PREDICT">PREDICT</button>
+    </div>
+
+    <script>
+        // Function to create random particles
+        function createParticle() {
+            const particle = document.createElement("div");
+            particle.classList.add("particle");
+
+            const size = Math.random() * 10 + 5; // Random size between 5px and 15px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+
+            const xPos = Math.random() * window.innerWidth;
+            const yPos = Math.random() * window.innerHeight;
+            particle.style.left = `${xPos}px`;
+            particle.style.top = `${yPos}px`;
+
+            document.getElementById("particles").appendChild(particle);
+
+            // Remove particle after animation ends
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        }
+
+        // Generate particles every 100ms
+        setInterval(createParticle, 100);
+
+        // Timer setup
+        const period1m = document.getElementById('period1m');
+        const timer1m = document.getElementById('timer1m');
+        const textview3 = document.getElementById('textview3');
+
+        function updateTimer() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const remainingSeconds = 60 - seconds;
+            const minutes = now.getMinutes();
+            const totalMinutes = now.getHours() * 60 + minutes;
+
+            // Update period number for 1-minute interval
+            period1m.textContent = `Period: ${new Date().toISOString().slice(0, 10)}1000${(10001 + totalMinutes).toString()}`;
+
+            // Update timer in format "xx : xx"
+            const formattedTime = `   ${String(0).padStart(2, '0')}  :  ${String(remainingSeconds).padStart(2, '0')}`;
+            timer1m.textContent = `Timer: ${formattedTime}`;
+        }
+
+        setInterval(updateTimer, 1000);
+
+        // Predict button action
+        const predictButton = document.getElementById('PREDICT');
+        predictButton.addEventListener('click', () => {
+            const result = Math.random() < 0.5 ? 'BIG' : 'SMALL';
+            textview3.textContent = `Result: ${result}`;
+        });
+    </script>
+
+</body>
+</html>
